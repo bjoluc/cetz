@@ -14,6 +14,7 @@
 #import "/src/anchor.typ" as anchor_
 #import "/src/mark.typ" as mark_
 #import "/src/mark-shapes.typ" as mark-shapes_
+#import "/src/polygon.typ"
 #import "/src/aabb.typ"
 
 #import "transformations.typ": *
@@ -504,6 +505,7 @@
 /// 
 /// = Anchors
 ///   Supports path anchors.
+///   The `"center"` anchor is calculated for triangles or closed polygons if all vertices share the same z value.
 ///
 /// - ..pts-style (coordinates, style): Positional two or more coordinates to draw lines between. Accepts style key-value pairs.
 /// - close (bool): If true, the line-strip gets closed to form a polygon
@@ -566,10 +568,17 @@
       close: close
     )
 
+    // Find center for simple polygons, might return none
+    let center = if close {
+      polygon.simple-centroid(pts)
+    }
+
     // Get bounds
     let (transform, anchors) = anchor_.setup(
-      auto,
-      (),
+      name => {
+        if name == "center" { return center }
+      },
+      if center != none { ("center",) } else { () },
       name: name,
       transform: ctx.transform,
       path-anchors: true,
