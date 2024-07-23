@@ -505,7 +505,7 @@
 /// 
 /// = Anchors
 ///   Supports path anchors.
-///   The `"center"` anchor is calculated for triangles or closed polygons if all vertices share the same z value.
+///   / center: The center anchor is calculated for _closed non self-intersecting_ polygons if all vertices share the same z value.
 ///
 /// - ..pts-style (coordinates, style): Positional two or more coordinates to draw lines between. Accepts style key-value pairs.
 /// - close (bool): If true, the line-strip gets closed to form a polygon
@@ -1432,7 +1432,8 @@
 /// = parameters
 ///
 /// = Anchors
-///   Supports path anchors.
+///   / center: Centroid of the _closed and non self-intersecting_ shape. Only exists if `close` is true.
+///   Supports path anchors and shapes where all vertices share the same z-value.
 ///
 /// - body (elements): Elements with paths to be merged together.
 /// - close (bool): Close the path with a straight line from the start of the path to its end.
