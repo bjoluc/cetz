@@ -1,3 +1,5 @@
+#import "/src/vector.typ"
+
 /// Returns a list of polygon points from
 /// a list of segments.
 ///

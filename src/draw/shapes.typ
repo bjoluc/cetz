@@ -1474,9 +1474,17 @@
       let style = styles.resolve(ctx.style, merge: style)
       let drawables = drawable.path(fill: style.fill, stroke: style.stroke, close: close, segments)
 
+      // Try finding a closed shapes center by
+      // Sampling it to a polygon.
+      let center = if close {
+        polygon.simple-centroid(polygon.from-segments(drawables.segments))
+      }
+
       let (transform, anchors) = anchor_.setup(
-        auto,
-        (),
+        name => {
+          if name == "center" { return center }
+        },
+        if center != none { ("center",) } else { () },
         name: name,
         transform: none,
         path-anchors: true,
